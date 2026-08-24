@@ -2,7 +2,7 @@
 
 The Lean behind **Principia Orthogona, Volume I: The Mathematics of Generative
 Transitions** (Zenodo V7: [10.5281/zenodo.22084842](https://doi.org/10.5281/zenodo.22084842) · concept DOI:
-[10.5281/zenodo.19117400](https://doi.org/10.5281/zenodo.19117400)),
+[10.5281/zenodo.19117399](https://doi.org/10.5281/zenodo.19117399)),
 in a repo small enough to build.
 
 G6 LLC · Pablo Nogueira Grossi · Newark NJ · 2026
@@ -29,30 +29,32 @@ gate that refuses on `sorryAx` or on any axiom outside the allowlist.
 ```
 toolchain   leanprover/lean4:v4.14.0
 mathlib     v4.14.0  (rev 4bbdccd9c5f862bf90ff12f0a9e2c8be032b9a84)
-theorems    49
+theorems    58
 sorry       0
 axioms      propext, Classical.choice, Quot.sound — nothing else
 ```
 
 ## What V7 fixed
 
-V6 of the deposit described `PrincipiaVol1.lean` as *"30+ facts proved without
-sorry, 1 scoped sorry at an eigenvalue API boundary."*
+V6 described `PrincipiaVol1.lean` as *"30+ facts proved without sorry, 1
+scoped sorry at an eigenvalue API boundary."*
 
-The first real build of that file — August 2026, the run recorded verbatim in
-[`record/v6-build-errors.txt`](record/v6-build-errors.txt) — reported **81
-errors**. It did not compile. Nothing claimed about it had been checked by
-anything. The file as deposited is kept in
-[`record/PrincipiaVol1-V6-as-deposited.lean.txt`](record/PrincipiaVol1-V6-as-deposited.lean.txt)
-so the two can be diffed.
+Built in August 2026 against the Mathlib revision this repo pins — v4.14.0,
+December 2024 — it produced **81 errors**
+([`record/v6-build-errors.txt`](record/v6-build-errors.txt)).
 
-The mechanical faults were structure fields separated by `;` (so `Dm3Triple`
-had exactly one field, and every `canonicalTriple.mu_max` was an unknown
-field), a `MetricSpace` passed where a `Dist` was expected, `(0 : Fin n)` with
-no `[NeZero n]`, four Ordinal lemmas that do not exist under that name, a
-club-filter chain built on `Function.iterate` whose lemmas were not provable in
-that form, and a carrier type that never unfolded to `ℤ`. All are fixed in
-place and marked `V7 FIX`.
+That is drift, not neglect. `Ordinal.sup` and `Ordinal.lt_sup` were deprecated
+2024-08-27; `Ordinal.IsLimit.add_right` was renamed `isLimit_add` 2024-10-11;
+`Set.finite_insert` is the Mathlib-3 spelling of `Set.Finite.insert`. Those are
+the names the file uses — current when it was written and run. Mathlib moved,
+the pin advanced past the code, later hand-edits were never rebuilt, and with
+no CI nothing re-ran the build. The V6 file is kept in
+[`record/`](record/PrincipiaVol1-V6-as-deposited.lean.txt) so the two can be
+diffed.
+
+V7 brings the file to the pin — structure fields, instance arguments, the
+Ordinal API, the club-filter chain, the ℤ carrier — all marked `V7 FIX` in
+place. **This repo exists so the next drift is caught the day it happens.**
 
 ### The separation theorem
 
@@ -92,9 +94,18 @@ V7 proves the true statement, with no `sorry`:
 | `spectral_trace_ne_33` | `λ₀ = 1`, `\|λᵢ\| ≤ e⁻²`, `n < 33` ⟹ `Σ λᵢ⁶ ≠ 33` |
 | `separation_theorem` | the same for a diagonal matrix: `Tr(M⁶) ≠ 33` |
 | `separation_trace_first` | first-power form, with the normalisation V6 omitted |
-| `separation_sharp_at_33` | `n = 33` realises 33 — the threshold is load-bearing |
+| `spectral_trace_ne_33_upto` | the same conclusion to `n = 131072` — the bound is sufficient, not necessary |
+| `separation_fails_in_high_dimension` | at ~1.7·10⁷ directions the trace does exceed 33 — nor can it be dropped |
+| `coherent_directions_realise_33` | 33 *coherent* directions realise 33 — about the coherent count, not `n` |
 | `dm3_hypothesis_nonvacuous` | a witness, so the statement is not vacuous |
 | `v6_separation_statement_is_false` | the refutation, kept on the record |
+| `v6_statement_false_at_dimension_five` | `diag(33,0,0,0,0)` — not a dimension-1 technicality |
+
+**A correction inside the correction.** A draft of V7 named one of these
+`separation_sharp_at_33` and read it as a sharpness witness for `n < 33`. It
+is not one: its witness has every `λᵢ = 1`, which violates the transverse
+hypothesis. `n < 33` is sufficient and far from necessary. The two theorems
+above bracket what it is actually worth.
 
 What stays open is the spectral reduction: for a general real `M`,
 `Tr(M⁶) = Σ λᵢ⁶` needs diagonalisability. V7 states the theorem where that
@@ -107,10 +118,38 @@ and it is what O1 should have said from the start.
 ```
 Vol1/PrincipiaVol1.lean   the deposit's Lean, V7
 tools/run.sh              build → probe → gate
-tools/probe.lean          #print axioms over all 49 theorems
+tools/counts.py           per-section counts, computed; --probe regenerates probe.lean
+tools/probe.lean          #print axioms over all 58 theorems
 tools/axiom_gate.py       refuses on sorryAx or an off-allowlist axiom
 record/                   the V6 file and its 81-error build log
 ```
+
+## What else V7 found
+
+Beyond the separation theorem, in the editorial pass:
+
+- **`ε₀`'s instantiation does not close (O7).** §22 states
+  `ε₀ = |μmax|/[2(1+sup‖Hess V‖)]`, sets `sup‖Hess V‖ = |L₂| = 3`, and computes
+  `2/(2·3) = 1/3`. The formula at H = 3 gives **1/4**. The printed arithmetic
+  and the Lean both use H = 2. `epsilon0_of_eq_third_iff` proves that under
+  this formula `ε₀ = 1/3` iff `H = 2`, so a choice is owed. Logged, not
+  silently repaired — `ε₀ = 1/3` is load-bearing corpus-wide.
+- **`UnfoldOp.stable_branch` is vacuous** — `n = 0` satisfies it for every map
+  on every type (`unfold_stable_branch_is_vacuous`). Theorem D has no content
+  beyond Φ-decrease.
+- **`CompressionOp.contractive` is non-expansive** — the identity satisfies it
+  (`compression_permits_identity`).
+- **`g6_equals_schumann` withdrawn** — it was `33 = 33` by `rfl`, an
+  unfalsifiable guard asserting an empirical identification.
+- **A physical prediction was reported as machine-checked** — the Factor-of-3
+  Prediction cited `basin_asymmetry : 1/3 < 4/5` as verification of a bound on
+  gravitational decoherence. Withdrawn.
+- **`1/3 < 4/5 ≈ r*`** — the corpus's canonical inner boundary is
+  `r★ = 0.77594059`; 4/5 is 3% above it. Both comparisons are now theorems.
+- **`V(1) + 2 = (q−1)²(q+2)`** in §19 — left side a number, right side a
+  function of q. The Lean says `V q + 2`. Typo fixed.
+- **`10.5281/zenodo.19117400` was labelled the series root.** It is the version
+  DOI of V1. The concept DOI is `19117399`.
 
 ## License
 
