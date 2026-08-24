@@ -1,0 +1,364 @@
+# Output of: lake env lean PrincipiaVol1.lean   (V6, exactly as deposited)
+# Lean v4.14.0, Mathlib v4.14.0 rev 4bbdccd9c5f862bf90ff12f0a9e2c8be032b9a84
+# Run: 2026-08-24
+
+/tmp/V6.lean:183:31: error: application type mismatch
+  @dist ?m.8500 M.metric
+argument
+  M.metric
+has type
+  MetricSpace M.carrier : Type ?u.8499
+but is expected to have type
+  Dist ?m.8500 : Type ?u.8499
+/tmp/V6.lean:183:66: error: application type mismatch
+  @dist ?m.9237 M.metric
+argument
+  M.metric
+has type
+  MetricSpace M.carrier : Type ?u.9236
+but is expected to have type
+  Dist ?m.9237 : Type ?u.9236
+/tmp/V6.lean:217:13: error: unexpected token ';'; expected command
+/tmp/V6.lean:223:27: error: 'mu_max' is not a field of structure 'Dm3Triple'
+/tmp/V6.lean:227:4: error: failed to compile definition, consider marking it as 'noncomputable' because it depends on 'Real.instLinearOrderedField', and it does not have executable code
+/tmp/V6.lean:230:25: error: invalid field 'tau', the environment does not contain 'PrincipiaVol1.Dm3Triple.tau'
+  canonicalTriple
+has type
+  Dm3Triple
+/tmp/V6.lean:230:74: error: unsolved goals
+⊢ sorry * (1 / 3) = 2 / 3
+/tmp/V6.lean:248:5: error: invalid field 'mu_max', the environment does not contain 'PrincipiaVol1.Dm3Triple.mu_max'
+  canonicalTriple
+has type
+  Dm3Triple
+/tmp/V6.lean:263:19: error: failed to synthesize
+  OfNat (Fin n) 0
+numerals are polymorphic in Lean, but the numeral `0` cannot be used in a context where the expected type is
+  Fin n
+due to the absence of the instance above
+Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/V6.lean:276:6: error: linarith failed to find a contradiction
+case h
+n : ℕ
+hn : n < 33
+M : Matrix (Fin n) (Fin n) ℝ
+hM : IsDm3Stable M
+this : Real.exp (-12) ≤ Real.exp (-1)
+a✝ : Real.exp (-12) ≥ 1 / 32
+⊢ False failed
+/tmp/V6.lean:278:2: error: linarith failed to find a contradiction
+case h
+n : ℕ
+hn : n < 33
+M : Matrix (Fin n) (Fin n) ℝ
+hM : IsDm3Stable M
+h_small : |M.trace - 1| < 1
+a✝ : M.trace = 33
+⊢ False failed
+/tmp/V6.lean:292:4: warning: `Ordinal.sup` has been deprecated, use `iSup` instead
+/tmp/V6.lean:310:21: warning: `Ordinal.sup` has been deprecated, use `iSup` instead
+/tmp/V6.lean:313:17: warning: `Ordinal.sup` has been deprecated, use `iSup` instead
+/tmp/V6.lean:313:34: warning: `Ordinal.lt_sup` has been deprecated, use `Ordinal.lt_iSup` instead
+/tmp/V6.lean:313:57: error: application type mismatch
+  Exists.intro 0 (le_refl ?m.20661)
+argument
+  le_refl ?m.20661
+has type
+  ?m.20661 ≤ ?m.20661 : Prop
+but is expected to have type
+  s 0 < s 0 : Prop
+/tmp/V6.lean:316:22: warning: `Ordinal.lt_sup` has been deprecated, use `Ordinal.lt_iSup` instead
+/tmp/V6.lean:317:10: warning: `Ordinal.lt_sup` has been deprecated, use `Ordinal.lt_iSup` instead
+/tmp/V6.lean:318:6: error: 'calc' expression has type
+  β < s (n + 1) : Prop
+but is expected to have type
+  Order.succ β < s (n + 1) : Prop
+/tmp/V6.lean:324:12: error: failed to synthesize
+  HAdd Ordinal.{u_1} (Ordinal.{?u.22940} ↪o Ordinal.{?u.22940}) ?m.25576
+Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/V6.lean:325:4: error: unknown constant 'Ordinal.lt_add_of_pos_right'
+/tmp/V6.lean:326:4: error: unknown constant 'Ordinal.IsLimit.add_right'
+/tmp/V6.lean:330:27: error: type mismatch
+  α.card.ord
+has type
+  Ordinal.{?u.25608} : Type (?u.25608 + 1)
+but is expected to have type
+  Ordinal.{?u.25606} ↪o Ordinal.{?u.25606} : Type (?u.25606 + 1)
+/tmp/V6.lean:331:44: warning: `Ordinal.sup` has been deprecated, use `iSup` instead
+/tmp/V6.lean:332:2: warning: `Ordinal.sup_lt_ord` has been deprecated, use `Ordinal.iSup_lt_ord` instead
+/tmp/V6.lean:332:21: error: application type mismatch
+  sup_lt_ord fun i => hs i
+argument
+  fun i => hs i
+has type
+  ∀ (i : ℕ), s i < α : Prop
+but is expected to have type
+  #?m.29146 < ?m.29148.cof : Prop
+/tmp/V6.lean:334:30: error: application type mismatch
+  card ω_
+argument
+  ω_
+has type
+  Ordinal.{?u.42024} ↪o Ordinal.{?u.42024} : Type (?u.42024 + 1)
+but is expected to have type
+  Ordinal.{?u.42023} : Type (?u.42023 + 1)
+/tmp/V6.lean:335:17: error: type mismatch
+  α.card
+has type
+  Cardinal.{u_1} : Type (u_1 + 1)
+but is expected to have type
+  Cardinal.{0} : Type 1
+/tmp/V6.lean:378:4: error: type mismatch
+  (PrincipiaVol1.pickAbove_spec C α hC (PrincipiaVol1.chain C α hC hα0 k) (PrincipiaVol1.chain_bound C α hC hα0 k)).left
+has type
+  PrincipiaVol1.pickAbove C α hC (PrincipiaVol1.chain C α hC hα0 k) ⋯ ∈ C : Prop
+but is expected to have type
+  ↑((PrincipiaVol1.chainStep C α hC)^[k] (PrincipiaVol1.chainStep C α hC ⟨PrincipiaVol1.pickAbove C α hC 0 hα0, ⋯⟩)) ∈
+    C : Prop
+/tmp/V6.lean:387:4: error: type mismatch
+  (PrincipiaVol1.pickAbove_spec C α hC (PrincipiaVol1.chain C α hC hα0 ?m.56130)
+        (PrincipiaVol1.chain_bound C α hC hα0 ?m.56130)).right.left
+has type
+  PrincipiaVol1.chain C α hC hα0 ?m.56130 <
+    PrincipiaVol1.pickAbove C α hC (PrincipiaVol1.chain C α hC hα0 ?m.56130) ⋯ : Prop
+but is expected to have type
+  (PrincipiaVol1.chainStep C α hC)^[m] ⟨PrincipiaVol1.pickAbove C α hC 0 hα0, ⋯⟩ <
+    (PrincipiaVol1.chainStep C α hC)^[m]
+      (PrincipiaVol1.chainStep C α hC ⟨PrincipiaVol1.pickAbove C α hC 0 hα0, ⋯⟩) : Prop
+/tmp/V6.lean:388:2: error: too many variable names provided at alternative 'step', #4 provided, but #3 expected
+/tmp/V6.lean:389:19: error: unknown identifier 'ih'
+/tmp/V6.lean:391:6: error: type mismatch
+  (PrincipiaVol1.pickAbove_spec C α hC (PrincipiaVol1.chain C α hC hα0 p)
+        (PrincipiaVol1.chain_bound C α hC hα0 p)).right.left
+has type
+  PrincipiaVol1.chain C α hC hα0 p < PrincipiaVol1.pickAbove C α hC (PrincipiaVol1.chain C α hC hα0 p) ⋯ : Prop
+but is expected to have type
+  ?m.56490 <
+    ↑((PrincipiaVol1.chainStep C α hC)^[p]
+        (PrincipiaVol1.chainStep C α hC ⟨PrincipiaVol1.pickAbove C α hC 0 hα0, ⋯⟩)) : Prop
+/tmp/V6.lean:396:27: error: type mismatch
+  α.card.ord
+has type
+  Ordinal.{?u.57228} : Type (?u.57228 + 1)
+but is expected to have type
+  Ordinal.{?u.57226} ↪o Ordinal.{?u.57226} : Type (?u.57226 + 1)
+/tmp/V6.lean:401:32: warning: `Ordinal.sup` has been deprecated, use `iSup` instead
+/tmp/V6.lean:403:15: warning: `Ordinal.sup` has been deprecated, use `iSup` instead
+/tmp/V6.lean:405:16: warning: `Ordinal.sup` has been deprecated, use `iSup` instead
+/tmp/V6.lean:409:9: warning: `Ordinal.sup` has been deprecated, use `iSup` instead
+/tmp/V6.lean:418:11: error: unexpected token ';'; expected command
+/tmp/V6.lean:421:14: error: unexpected token ';'; expected '}'
+/tmp/V6.lean:424:24: error: unexpected token ';'; expected '}'
+/tmp/V6.lean:429:4: error: invalid field 'layer_count', the environment does not contain 'PrincipiaVol1.RegenerationLevel.layer_count'
+  r
+has type
+  RegenerationLevel
+/tmp/V6.lean:429:20: error: invalid field 'layer_count', the environment does not contain 'PrincipiaVol1.RegenerationLevel.layer_count'
+  nextLevel r
+has type
+  RegenerationLevel
+/tmp/V6.lean:429:52: error: simp made no progress
+/tmp/V6.lean:438:17: error: unexpected token ';'; expected command
+/tmp/V6.lean:441:36: error: unexpected token ';'; expected '}'
+/tmp/V6.lean:447:2: error: unknown constant 'Ordinal.IsLimit.add_right'
+/tmp/V6.lean:455:9: error: invalid constructor ⟨...⟩, expected type must be an inductive type 
+  Quot ⇑Ordinal.isEquivalent
+/tmp/V6.lean:461:27: error: type mismatch
+  (ordinalNextLevel r).level.card.ord
+has type
+  Ordinal.{?u.68255} : Type (?u.68255 + 1)
+but is expected to have type
+  Ordinal.{?u.68251} ↪o Ordinal.{?u.68251} : Type (?u.68251 + 1)
+/tmp/V6.lean:616:37: error: failed to synthesize
+  Dist intManifold.carrier
+Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/V6.lean:624:40: error: type mismatch
+  x
+has type
+  intManifold.carrier : Type
+but is expected to have type
+  ℝ : Type
+Try this: ring_nf
+/tmp/V6.lean:624:61: error: unsolved goals
+x : intManifold.carrier
+⊢ ↑x ^ 2 = sorry ^ 2
+/tmp/V6.lean:630:15: error: failed to synthesize
+  OfNat intManifold.carrier 5
+numerals are polymorphic in Lean, but the numeral `5` cannot be used in a context where the expected type is
+  intManifold.carrier
+due to the absence of the instance above
+Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/V6.lean:630:18: error: failed to synthesize
+  OfNat intManifold.carrier 6
+numerals are polymorphic in Lean, but the numeral `6` cannot be used in a context where the expected type is
+  intManifold.carrier
+due to the absence of the instance above
+Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/V6.lean:630:21: error: unsolved goals
+⊢ False
+/tmp/V6.lean:633:7: error: unknown constant 'Set.finite_insert'
+/tmp/V6.lean:635:4: error: simp made no progress
+/tmp/V6.lean:641:23: warning: unused variable `x`
+note: this linter can be disabled with `set_option linter.unusedVariables false`
+/tmp/V6.lean:642:23: warning: unused variable `x`
+note: this linter can be disabled with `set_option linter.unusedVariables false`
+/tmp/V6.lean:646:17: error: unsolved goals
+x y : intManifold.carrier
+⊢ dist (x + 1) (y + 1) ≤ dist x y
+/tmp/V6.lean:652:4: error: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+/tmp/V6.lean:659:35: error: failed to synthesize
+  HPow intManifold.carrier ℕ ℤ
+Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/V6.lean:662:18: error: failed to synthesize
+  LE intManifold.carrier
+Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/V6.lean:662:18: error: failed to synthesize
+  OfNat intManifold.carrier 1
+numerals are polymorphic in Lean, but the numeral `1` cannot be used in a context where the expected type is
+  intManifold.carrier
+due to the absence of the instance above
+Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/V6.lean:662:30: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  a ≥ 1
+where
+ a := x
+/tmp/V6.lean:663:8: error: linarith failed to find a contradiction
+case pos.a
+x : intManifold.carrier
+h1 : 0 < x
+hx : sorry
+a✝ : (x - 1) ^ 2 > x ^ 2
+⊢ False failed
+/tmp/V6.lean:664:22: error: failed to synthesize
+  Neg intManifold.carrier
+Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/V6.lean:664:23: error: failed to synthesize
+  OfNat intManifold.carrier 1
+numerals are polymorphic in Lean, but the numeral `1` cannot be used in a context where the expected type is
+  intManifold.carrier
+due to the absence of the instance above
+Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/V6.lean:664:31: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  a ≤ -1
+where
+ a := x
+/tmp/V6.lean:665:8: error: linarith failed to find a contradiction
+case pos.a
+x : intManifold.carrier
+h1 : ¬0 < x
+h2 : x < 0
+hx : sorry
+a✝ : (x + 1) ^ 2 > x ^ 2
+⊢ False failed
+/tmp/V6.lean:666:22: error: failed to synthesize
+  OfNat intManifold.carrier 0
+numerals are polymorphic in Lean, but the numeral `0` cannot be used in a context where the expected type is
+  intManifold.carrier
+due to the absence of the instance above
+Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/V6.lean:666:30: error: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+/tmp/V6.lean:667:14: error: unknown identifier 'hx'
+/tmp/V6.lean:668:39: error: type mismatch
+  x
+has type
+  intManifold.carrier : Type
+but is expected to have type
+  ℝ : Type
+/tmp/V6.lean:669:19: error: unknown identifier 'key'
+/tmp/V6.lean:657:22: error: unsolved goals
+case refine_2
+x : intManifold.carrier
+key : shrinkMap x ^ 2 ≤ x ^ 2
+⊢ intManifold.Phi (shrinkMap x) ≤ intManifold.Phi x
+/tmp/V6.lean:675:40: error: type mismatch
+  x
+has type
+  intManifold.carrier : Type
+but is expected to have type
+  ℝ : Type
+Try this: ring_nf
+/tmp/V6.lean:675:61: error: unsolved goals
+x : intManifold.carrier
+⊢ ↑x ^ 2 = sorry ^ 2
+/tmp/V6.lean:682:15: error: failed to synthesize
+  OfNat intManifold.carrier 5
+numerals are polymorphic in Lean, but the numeral `5` cannot be used in a context where the expected type is
+  intManifold.carrier
+due to the absence of the instance above
+Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/V6.lean:682:18: error: failed to synthesize
+  Neg intManifold.carrier
+Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/V6.lean:682:19: error: failed to synthesize
+  OfNat intManifold.carrier 5
+numerals are polymorphic in Lean, but the numeral `5` cannot be used in a context where the expected type is
+  intManifold.carrier
+due to the absence of the instance above
+Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/V6.lean:682:22: error: unsolved goals
+⊢ False
+/tmp/V6.lean:685:7: error: unknown constant 'Set.finite_insert'
+/tmp/V6.lean:687:4: error: simp made no progress
+/tmp/V6.lean:695:49: error: failed to synthesize
+  OfNat intManifold.carrier 5
+numerals are polymorphic in Lean, but the numeral `5` cannot be used in a context where the expected type is
+  intManifold.carrier
+due to the absence of the instance above
+Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/V6.lean:696:52: error: failed to synthesize
+  OfNat intManifold.carrier 5
+numerals are polymorphic in Lean, but the numeral `5` cannot be used in a context where the expected type is
+  intManifold.carrier
+due to the absence of the instance above
+Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/V6.lean:696:57: error: unsolved goals
+⊢ ¬(if -sorry = 5 then 0 else if -sorry = 6 then 0 else -sorry) =
+      -if sorry = 5 then 0 else if sorry = 6 then 0 else sorry
+/tmp/V6.lean:708:49: error: failed to synthesize
+  OfNat intManifold.carrier 4
+numerals are polymorphic in Lean, but the numeral `4` cannot be used in a context where the expected type is
+  intManifold.carrier
+due to the absence of the instance above
+Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/V6.lean:709:52: error: failed to synthesize
+  OfNat intManifold.carrier 4
+numerals are polymorphic in Lean, but the numeral `4` cannot be used in a context where the expected type is
+  intManifold.carrier
+due to the absence of the instance above
+Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/V6.lean:709:57: error: unsolved goals
+⊢ ¬(-if (if 0 < sorry + 1 then sorry else if sorry + 1 < 0 then sorry + 1 + 1 else 0) = 5 then 0
+        else
+          if (if 0 < sorry + 1 then sorry else if sorry + 1 < 0 then sorry + 1 + 1 else 0) = 6 then 0
+          else if 0 < sorry + 1 then sorry else if sorry + 1 < 0 then sorry + 1 + 1 else 0) =
+      -if 0 < if sorry + 1 = 5 then 0 else if sorry + 1 = 6 then 0 else sorry + 1 then
+          (if sorry + 1 = 5 then 0 else if sorry + 1 = 6 then 0 else sorry + 1) - 1
+        else
+          if (if sorry + 1 = 5 then 0 else if sorry + 1 = 6 then 0 else sorry + 1) < 0 then
+            (if sorry + 1 = 5 then 0 else if sorry + 1 = 6 then 0 else sorry + 1) + 1
+          else 0
+/tmp/V6.lean:724:16: error: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+/tmp/V6.lean:724:16: error: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+/tmp/V6.lean:724:16: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  a ≤ -6
+where
+ a := x
+/tmp/V6.lean:730:40: error: failed to synthesize
+  OfNat intManifold.carrier 4
+numerals are polymorphic in Lean, but the numeral `4` cannot be used in a context where the expected type is
+  intManifold.carrier
+due to the absence of the instance above
+Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/V6.lean:736:46: error: failed to synthesize
+  OfNat intManifold.carrier 5
+numerals are polymorphic in Lean, but the numeral `5` cannot be used in a context where the expected type is
+  intManifold.carrier
+due to the absence of the instance above
+Additional diagnostic information may be available using the `set_option diagnostics true` command.
