@@ -1,7 +1,8 @@
 # vol1-proofs
 
 The Lean behind **Principia Orthogona, Volume I: The Mathematics of Generative
-Transitions** (Zenodo [10.5281/zenodo.19117400](https://doi.org/10.5281/zenodo.19117400)),
+Transitions** (Zenodo V7: [10.5281/zenodo.22084842](https://doi.org/10.5281/zenodo.22084842) · concept DOI:
+[10.5281/zenodo.19117400](https://doi.org/10.5281/zenodo.19117400)),
 in a repo small enough to build.
 
 G6 LLC · Pablo Nogueira Grossi · Newark NJ · 2026
