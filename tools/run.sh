@@ -10,15 +10,14 @@
 # CHANGED 2026-08-25, three defects, all of the same shape -- a check whose
 # scope was set by the thing being checked:
 #
-#   1. N was 49, "theorems named in the probe".  The file declares 58 and
-#      Theorem53NonCommutativity.lean adds 7.  The gate compared the probe's
-#      output to a number describing the probe, so eleven V7 theorems were
-#      never asked about and the gate went green anyway.  N is now 65 and
-#      describes the FILES.
+#   1. N was 49, "theorems named in the probe".  The file declares 58.  The
+#      gate compared the probe's output to a number describing the probe, so
+#      nine V7 theorems were never asked about and the gate went green
+#      anyway.  N now describes the FILE, and tools/counts.py emits both the
+#      probe and the number from the source so they cannot disagree again.
 #
-#   2. lake build Vol1 built one target.  Theorem53NonCommutativity.lean was
-#      not in this tree and not in any target.  Now `lake build` with no
-#      argument builds every default target, and the lakefile declares both.
+#   2. lake build Vol1 built a target named for the library, not the module.
+#      `lake build` with no argument now builds every default target.
 #
 #   3. tools/axiom_gate.py failed OPEN on Lean's wrapped output: a theorem
 #      whose axiom list spanned lines had its continuation lines dropped
@@ -30,7 +29,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"; cd "$ROOT" || exit 1
 
 PROBE="tools/probe.lean"
 OUT="tools/axioms.txt"
-N=65                                    # theorems declared in BOTH .lean files
+N=58                                    # theorems declared in PrincipiaVol1.lean
 
 command -v lake >/dev/null 2>&1 || {
   echo "lake not found. Install elan first:"

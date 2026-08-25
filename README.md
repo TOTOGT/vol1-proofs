@@ -116,13 +116,37 @@ and it is what O1 should have said from the start.
 ## Layout
 
 ```
-Vol1/PrincipiaVol1.lean   the deposit's Lean, V7
+PrincipiaVol1.lean        the deposit's Lean, V7 — the only source of theorems
 tools/run.sh              build → probe → gate
-tools/counts.py           per-section counts, computed; --probe regenerates probe.lean
-tools/probe.lean          #print axioms over all 58 theorems
+tools/counts.py           reads the source; emits the probe and N. Never type N.
+tools/probe.lean          generated — #print axioms over all 58 theorems
 tools/axiom_gate.py       refuses on sorryAx or an off-allowlist axiom
+tools/test_axiom_gate.py  fixtures, including the run #245 fail-open case
+.github/workflows/        runs tools/run.sh on every push, and gates on it
 record/                   the V6 file and its 81-error build log
+figures/ figures.py       the seven figures and their generator
+principia_vol1_v7.pdf     the paper
 ```
+
+### One file, one home for each theorem
+
+`Theorem53NonCommutativity.lean` was briefly a second target here. It is a
+strict subset of `PrincipiaVol1.lean`: the same seven propositions —
+`foldMap_not_odd`, `nonCommutativity_instance`,
+`nonCommutativity_nondegenerate`, `commuting_instance`,
+`exists_order_dependent`, `not_forall_order_dependent`,
+`thm_5_3_is_exactly_existential` — over the same `intManifold` and the same
+operator instances that §14 already carries, alongside five more it does not.
+
+Checked three ways before dropping it: the seven names are a subset of §14's
+twelve; the statements match; and the repaired copy in `io` differs from the
+stale one only in `@[reducible]`, a `push_cast` and a restructured
+`finite_branch` proof — **no statement changed**. So `N` went 65 → 58, which
+was always the honest number: 65 counted 58 theorems, seven of them twice.
+
+Two copies of one proof inside one repo is the mechanism that produced the V6
+drift. There is now one.
+
 
 ## What else V7 found
 

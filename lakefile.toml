@@ -1,14 +1,19 @@
 name = "Vol1"
 version = "0.2.0"
 
-# Both files are default targets.
+# One target, because there is one file.
 #
-# Until 2026-08-25 this read defaultTargets = ["Vol1"] with roots = ["Vol1"],
-# and Theorem53NonCommutativity.lean was not in this tree at all -- it lived
-# only in the GitHub copy. Its seven theorems were therefore checked by
-# nothing. A .lean file that is not a target is not verified by anything,
-# however green the build looks.
-defaultTargets = ["PrincipiaVol1", "Theorem53NonCommutativity"]
+# Theorem53NonCommutativity.lean was briefly added here as a second target.
+# It is a strict subset of PrincipiaVol1.lean: its seven theorems --
+# foldMap_not_odd, nonCommutativity_instance, nonCommutativity_nondegenerate,
+# commuting_instance, exists_order_dependent, not_forall_order_dependent,
+# thm_5_3_is_exactly_existential -- are the same propositions over the same
+# intManifold and the same operator instances that PrincipiaVol1 section 14
+# already carries, alongside five more it does not.  Keeping both put the same
+# proof in two places inside one repo, which is the mechanism that produced
+# the V6 drift.  Dropped; nothing is lost.  Verified by comparing statements,
+# not names, on 2026-08-25.
+defaultTargets = ["PrincipiaVol1"]
 
 # Pinned by REVISION, not by tag.
 #
@@ -26,6 +31,3 @@ rev = "4bbdccd9c5f862bf90ff12f0a9e2c8be032b9a84"
 
 [[lean_lib]]
 name = "PrincipiaVol1"
-
-[[lean_lib]]
-name = "Theorem53NonCommutativity"
