@@ -1,4 +1,5 @@
-.lake/
-tools/build.log
 
+.DS_Store
+.lake/
 tools/*.out
+tools/build.log
