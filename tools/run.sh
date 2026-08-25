@@ -29,7 +29,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"; cd "$ROOT" || exit 1
 
 PROBE="tools/probe.lean"
 OUT="tools/axioms.txt"
-N=58                                    # theorems declared in PrincipiaVol1.lean
+N=82                                    # PrincipiaVol1.lean (58) + AutophagyDm3_v2.lean (24)
 
 command -v lake >/dev/null 2>&1 || {
   echo "lake not found. Install elan first:"
@@ -109,13 +109,25 @@ echo "  fixtures: 5/5 flagged, control clean"
 lake env lean tools/vacuity.lean > tools/vacuity.out 2>&1
 cat tools/vacuity.out
 vac=$(grep -c '^VACUOUS: ' tools/vacuity.out || true)
+ign=$(grep -c '^IGNORES-ITS-ARGUMENT: ' tools/vacuity.out || true)
 if [ "$vac" -ne 0 ]; then
   echo
   echo "RED - $vac theorem(s) with a trivially inhabited statement."
   echo "      These pass the axiom gate and say nothing.  Restate or remove."
   exit 1
 fi
-echo "  no theorem in the file has conclusion True or exists _, True"
+if [ "$ign" -ne 0 ]; then
+  echo
+  echo "RED - $ign Prop-definition(s) that never mention an argument."
+  echo "      A predicate that ignores its subject is true of every subject."
+  echo "      IsMorseCritical was one: it took f and never used it, so every"
+  echo "      function was Morse-critical everywhere.  The compiler had been"
+  echo "      saying so as 'unused variable', which is a warning, and warnings"
+  echo "      scroll past.  This is the same check, promoted to a refusal."
+  exit 1
+fi
+echo "  no theorem has conclusion True or exists _, True"
+echo "  no Prop-definition ignores an argument"
 echo
 [ "$gate" -eq 0 ] && echo "GREEN - build, axioms, and statements all checked."
 exit $gate

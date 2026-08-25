@@ -13,7 +13,7 @@ version = "0.2.0"
 # proof in two places inside one repo, which is the mechanism that produced
 # the V6 drift.  Dropped; nothing is lost.  Verified by comparing statements,
 # not names, on 2026-08-25.
-defaultTargets = ["PrincipiaVol1"]
+defaultTargets = ["PrincipiaVol1", "AutophagyDm3_v2"]
 
 # Pinned by REVISION, not by tag.
 #
@@ -31,3 +31,10 @@ rev = "4bbdccd9c5f862bf90ff12f0a9e2c8be032b9a84"
 
 [[lean_lib]]
 name = "PrincipiaVol1"
+
+# Added 2026-08-25. Not a duplicate of anything: distinct theorems, its own
+# namespace, and it is the merge of the two divergent copies that were on
+# disk. Verified before landing -- 24 theorems, 0 sorry, 0 vacuous, and the
+# one Prop-definition in it now mentions its own argument.
+[[lean_lib]]
+name = "AutophagyDm3_v2"
