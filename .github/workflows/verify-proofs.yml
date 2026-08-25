@@ -1,0 +1,105 @@
+# Verify the Volume I proofs — real kernel check.
+#
+# WHY THIS FILE EXISTS, 2026-08-25.
+#
+# The only workflow in this repository was `pages-build-deployment`, the
+# automatic GitHub Pages job. It compiles no Lean. It would pass just as
+# happily if every .lean file here were empty. A green check therefore meant
+# "the website deployed" and nothing whatsoever about the proofs — while
+# PrincipiaVol1.lean's header asserted "58 theorems, 0 sorry, no axioms beyond
+# propext / Classical.choice / Quot.sound".
+#
+# The harness that could substantiate that — lakefile, toolchain, probe, gate,
+# run.sh — existed on the author's disk and had never been pushed. This file
+# does not reimplement it. It RUNS it.
+#
+# ONE PATH, NOT TWO.
+#
+# Every step below that could decide the job is inside `bash tools/run.sh`,
+# the same command a human runs locally. A workflow that reimplements the
+# check in YAML creates a second copy that drifts from the first — which is
+# exactly how geometry's CI produced run #245, where a shell pipeline copied
+# into two workflow steps misread Lean's wrapped output and named a PERMITTED
+# axiom as the offender. Two copies meant one defect in two places. There is
+# one copy here, and it lives in a file that can be run on fixtures.
+#
+# WHAT run.sh CHECKS, IN ORDER
+#
+#   0. the gate on its own fixtures — the instrument before the measurement
+#   1. lake build, all default targets
+#   2. sorry warnings, reported and explicitly not gating
+#   3. #print axioms over all 65 theorems
+#   4. the gate: no sorryAx, allowlist clean, count equals 65
+#
+# Neither `lake build` exiting 0 nor grepping for "sorry" can decide anything.
+# The first is a warning, not an error, so a build full of sorrys is green.
+# The second cannot tell a declaration from a comment, and cannot see a
+# theorem that is sorry-free and vacuous. Only #print axioms sees both.
+
+name: Verify Lean proofs (real kernel check)
+
+# A push trigger cannot detect STALENESS. Decay happens when a toolchain or a
+# library moves under a claim nobody is touching, so the commit that would
+# fire CI never arrives. V6's drift stood for months precisely because no
+# relevant push occurred. A clock is the only thing that finds that.
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '23 6 * * 1'   # Mondays 06:23 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  kernel-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install elan (Lean toolchain manager)
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh \
+            -o elan-init.sh
+          sha256sum elan-init.sh
+          bash elan-init.sh -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Report the toolchain actually in use
+        run: |
+          set -euo pipefail
+          echo "lean-toolchain pins: $(cat lean-toolchain)"
+          lean --version
+          lake --version
+
+      # The deposit's own complaint is that nothing ever re-ran the build, so
+      # drift was silent for months. A run that costs an hour is a run nobody
+      # triggers. Mathlib is pinned at a December 2024 revision; if the
+      # upstream olean cache for it has aged out, `cache get` misses and
+      # Mathlib builds from source. Caching .lake means that happens once.
+      - name: Restore .lake
+        uses: actions/cache@v4
+        with:
+          path: .lake
+          key: lake-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lakefile.toml', 'lake-manifest.json') }}
+          restore-keys: |
+            lake-${{ runner.os }}-
+
+      - name: Verify (gate self-test, build, probe, gate)
+        run: |
+          set -euo pipefail
+          bash tools/run.sh
+
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verification-reports
+          path: |
+            tools/build.log
+            tools/axioms.txt
+          if-no-files-found: warn
