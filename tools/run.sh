@@ -4,15 +4,33 @@
 #   bash tools/run.sh
 #
 # This is a small repo on purpose.  AXLE is too large to build for one
-# check; this one holds a single file and answers a single question:
-# does the deposited Lean compile, and is every theorem in it really
-# checked by the kernel?
+# check; this one holds the deposited Lean and answers a single question:
+# does it compile, and is every theorem in it really checked by the kernel?
+#
+# CHANGED 2026-08-25, three defects, all of the same shape -- a check whose
+# scope was set by the thing being checked:
+#
+#   1. N was 49, "theorems named in the probe".  The file declares 58 and
+#      Theorem53NonCommutativity.lean adds 7.  The gate compared the probe's
+#      output to a number describing the probe, so eleven V7 theorems were
+#      never asked about and the gate went green anyway.  N is now 65 and
+#      describes the FILES.
+#
+#   2. lake build Vol1 built one target.  Theorem53NonCommutativity.lean was
+#      not in this tree and not in any target.  Now `lake build` with no
+#      argument builds every default target, and the lakefile declares both.
+#
+#   3. tools/axiom_gate.py failed OPEN on Lean's wrapped output: a theorem
+#      whose axiom list spanned lines had its continuation lines dropped
+#      before the sorryAx check, and its bracket regex never matched, so an
+#      admitted theorem passed.  Replaced with the fixtured gate from the
+#      geometry repository, which has the run #245 output as a regression case.
 set -uo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"; cd "$ROOT" || exit 1
 
 PROBE="tools/probe.lean"
 OUT="tools/axioms.txt"
-N=49                                    # theorems named in the probe
+N=65                                    # theorems declared in BOTH .lean files
 
 command -v lake >/dev/null 2>&1 || {
   echo "lake not found. Install elan first:"
@@ -23,25 +41,45 @@ echo "toolchain pinned : $(cat lean-toolchain)"
 echo "mathlib pinned   : $(python3 -c "import json;print(json.load(open('lake-manifest.json'))['packages'][0]['rev'])" 2>/dev/null || echo '?')"
 echo
 
-echo "-- 1/3  lake build --------------------------------------------------"
-lake exe cache get || echo "  (mathlib cache miss - this will build from source, slowly)"
-lake build Vol1 || {
-  echo "BUILD FAILED - the Lean does not compile. Nothing below is meaningful."
+echo "-- 0/4  gate self-test -----------------------------------------------"
+# The gate is a claim about the artifact it guards, and is subject to the same
+# rule as any other claim here: it has to be checked.  Run it on its fixtures
+# BEFORE trusting its verdict below.
+python3 tools/test_axiom_gate.py || {
+  echo "GATE SELF-TEST FAILED - the instrument is broken. Nothing below counts."
   exit 1; }
 
 echo
-echo "-- 2/3  kernel axiom probe ------------------------------------------"
+echo "-- 1/4  lake build ---------------------------------------------------"
+lake exe cache get || echo "  (mathlib cache miss - this will build from source, slowly)"
+lake build 2>&1 | tee tools/build.log || true
+if ! grep -q "Build completed successfully" tools/build.log; then
+  echo "BUILD FAILED - the Lean does not compile. Nothing below is meaningful."
+  exit 1
+fi
+
+echo
+echo "-- 2/4  informational: sorry warnings ---------------------------------"
+# Lean writes: declaration uses `sorry`  -- BACKTICKS, not quotes. A grep
+# written as 'sorry' matches nothing and prints 0, which reads as clean.
+# Reported, never gating: `lake build` exits 0 with sorrys present.
+grep -n 'declaration uses' tools/build.log || echo "  (none)"
+
+echo
+echo "-- 3/4  kernel axiom probe -------------------------------------------"
 lake env lean "$PROBE" > "$OUT" 2>&1
 rc=$?
 cat "$OUT"
 [ "$rc" -ne 0 ] && { echo; echo "PROBE FAILED TO ELABORATE (exit $rc)."; exit 1; }
 
 echo
-echo "-- 3/3  axiom gate --------------------------------------------------"
+echo "-- 4/4  axiom gate ---------------------------------------------------"
 python3 tools/axiom_gate.py "$OUT" "$N"
 gate=$?
 echo
 if [ "$gate" -ne 0 ]; then
   echo "RED - read the report above."
+else
+  echo "GREEN - $N theorems, kernel-checked, no sorryAx, allowlist clean."
 fi
 exit $gate

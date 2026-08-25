@@ -1,12 +1,31 @@
 name = "Vol1"
-version = "0.1.0"
-defaultTargets = ["Vol1"]
+version = "0.2.0"
 
+# Both files are default targets.
+#
+# Until 2026-08-25 this read defaultTargets = ["Vol1"] with roots = ["Vol1"],
+# and Theorem53NonCommutativity.lean was not in this tree at all -- it lived
+# only in the GitHub copy. Its seven theorems were therefore checked by
+# nothing. A .lean file that is not a target is not verified by anything,
+# however green the build looks.
+defaultTargets = ["PrincipiaVol1", "Theorem53NonCommutativity"]
+
+# Pinned by REVISION, not by tag.
+#
+# This previously read rev = "v4.14.0". A tag can be moved; a revision cannot.
+# CHANGES_Vol1.md already states the rule -- "Toolchain and Mathlib revision
+# now pinned and stated. 'Current stable' is not a pin" -- and PrincipiaVol1's
+# header already names this exact hash. lake-manifest.json confirms the tag
+# resolved here, so this edit changes nothing about what is built and removes
+# the tag's ability to drift under the code later. Silent drift under an
+# unchanged pin is what produced V6's 81 errors.
 [[require]]
 name = "mathlib"
 git = "https://github.com/leanprover-community/mathlib4.git"
-rev = "v4.14.0"
+rev = "4bbdccd9c5f862bf90ff12f0a9e2c8be032b9a84"
 
 [[lean_lib]]
-name = "Vol1"
-roots = ["Vol1"]
+name = "PrincipiaVol1"
+
+[[lean_lib]]
+name = "Theorem53NonCommutativity"

@@ -1,4 +1,34 @@
-import Vol1.PrincipiaVol1
+/-
+  tools/probe.lean — the only artifact permitted to decide the verdict.
+
+  WHAT CHANGED, 2026-08-25.  This probe named 49 theorems and tools/run.sh
+  passed N=49 to the gate, so the gate went green while ELEVEN theorems in
+  PrincipiaVol1.lean had never been asked about:
+
+      epsilon0_of_eq_third_iff · epsilon0_of_two · epsilon0_of_three
+      v6_statement_false_at_dimension_five · separation_fails_in_high_dimension
+      unfold_stable_branch_is_vacuous · coherent_directions_realise_33
+      spectral_trace_ne_33_upto · basin_asymmetry_at_canonical_r_star
+      transverse_sum_bound_general · compression_permits_identity
+
+  Those are the V7 additions.  The editorial pass repaired the file and did
+  not extend the instrument that checks it, so everything V7 fixed sat
+  outside the gate — including epsilon0_of_eq_third_iff, which OPEN_QUESTIONS
+  cites as the evidence for O7, and v6_statement_false_at_dimension_five,
+  which O1 calls "proved and kept".
+
+  The count check cannot catch this by itself.  It compares the probe's
+  output to a number describing the probe.  Calibrating the gate to the
+  instrument rather than to the file makes a missing theorem invisible.
+  N in tools/run.sh is now 65 and must equal the theorem count of both
+  files; if you add a theorem, add it here.
+
+  Theorem53NonCommutativity's 7 theorems are included for the first time.
+-/
+import PrincipiaVol1
+import Theorem53NonCommutativity
+
+-- PrincipiaVol1 — 58 theorems
 #print axioms PrincipiaVol1.V_critical_at_one
 #print axioms PrincipiaVol1.V_second_deriv_at_one
 #print axioms PrincipiaVol1.V_second_deriv_ne_zero
@@ -7,9 +37,13 @@ import Vol1.PrincipiaVol1
 #print axioms PrincipiaVol1.contactCoeff_neg
 #print axioms PrincipiaVol1.contactCoeff_ne_zero
 #print axioms PrincipiaVol1.gronwall_radius
+#print axioms PrincipiaVol1.epsilon0_of_two
+#print axioms PrincipiaVol1.epsilon0_of_three
+#print axioms PrincipiaVol1.epsilon0_of_eq_third_iff
 #print axioms PrincipiaVol1.gronwall_radius_pos
 #print axioms PrincipiaVol1.gronwall_radius_lt_one
 #print axioms PrincipiaVol1.basin_asymmetry
+#print axioms PrincipiaVol1.basin_asymmetry_at_canonical_r_star
 #print axioms PrincipiaVol1.mu_canonical
 #print axioms PrincipiaVol1.mu_dm3_neg
 #print axioms PrincipiaVol1.Phi_pos
@@ -23,9 +57,13 @@ import Vol1.PrincipiaVol1
 #print axioms PrincipiaVol1.spectral_trace_ne_33
 #print axioms PrincipiaVol1.separation_theorem
 #print axioms PrincipiaVol1.separation_trace_first
-#print axioms PrincipiaVol1.separation_sharp_at_33
+#print axioms PrincipiaVol1.coherent_directions_realise_33
+#print axioms PrincipiaVol1.transverse_sum_bound_general
+#print axioms PrincipiaVol1.spectral_trace_ne_33_upto
+#print axioms PrincipiaVol1.separation_fails_in_high_dimension
 #print axioms PrincipiaVol1.dm3_hypothesis_nonvacuous
 #print axioms PrincipiaVol1.v6_separation_statement_is_false
+#print axioms PrincipiaVol1.v6_statement_false_at_dimension_five
 #print axioms PrincipiaVol1.sup_strictMono_isLimit
 #print axioms PrincipiaVol1.closurePoints_unbounded
 #print axioms PrincipiaVol1.sup_lt_of_regular
@@ -37,7 +75,7 @@ import Vol1.PrincipiaVol1
 #print axioms PrincipiaVol1.regeneration_hierarchy_mahlo
 #print axioms PrincipiaVol1.crystal_aspect_ratio
 #print axioms PrincipiaVol1.aspect_ratio_encodes_invariants
-#print axioms PrincipiaVol1.g6_equals_schumann
+#print axioms PrincipiaVol1.unfold_stable_branch_is_vacuous
 #print axioms PrincipiaVol1.foldMap_not_odd
 #print axioms PrincipiaVol1.foldMap_branch_subset
 #print axioms PrincipiaVol1.foldSym_branch_subset
@@ -45,6 +83,16 @@ import Vol1.PrincipiaVol1
 #print axioms PrincipiaVol1.nonCommutativity_instance
 #print axioms PrincipiaVol1.nonCommutativity_nondegenerate
 #print axioms PrincipiaVol1.commuting_instance
+#print axioms PrincipiaVol1.compression_permits_identity
 #print axioms PrincipiaVol1.exists_order_dependent
 #print axioms PrincipiaVol1.not_forall_order_dependent
 #print axioms PrincipiaVol1.thm_5_3_is_exactly_existential
+
+-- Theorem53NonCommutativity — 7 theorems
+#print axioms Theorem53NonCommutativity.foldMap_not_odd
+#print axioms Theorem53NonCommutativity.nonCommutativity_instance
+#print axioms Theorem53NonCommutativity.nonCommutativity_nondegenerate
+#print axioms Theorem53NonCommutativity.commuting_instance
+#print axioms Theorem53NonCommutativity.exists_order_dependent
+#print axioms Theorem53NonCommutativity.not_forall_order_dependent
+#print axioms Theorem53NonCommutativity.thm_5_3_is_exactly_existential
