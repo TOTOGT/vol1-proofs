@@ -135,7 +135,7 @@
         `epsilon0_of_eq_third_iff`.  Deciding it is a question about the
         Hessian bound, not about Lean.
 
-  License: CC BY-NC-ND 4.0 (paper) · MIT (code)
+  License: CC BY 4.0 (paper) · MIT (code)
 -/
 
 import Mathlib.Data.Real.Basic

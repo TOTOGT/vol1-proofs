@@ -318,6 +318,6 @@ Whitney fold · singularity theory · variational mechanics · symplectic geomet
 Ricci flow · Perelman conjecture · Lean 4 formal verification · dimensional
 threshold · dm³ framework · Gronwall stability · Principia Orthogona · G6 LLC
 
-**License:** CC BY-NC-ND 4.0 (paper) · MIT (code)
+**License:** CC BY 4.0 (paper) · MIT (code)
 **Copyright:** © 2026 Pablo Nogueira Grossi, G6 LLC
 **Contact:** g6llc@proton.me

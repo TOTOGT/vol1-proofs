@@ -177,4 +177,8 @@ Beyond the separation theorem, in the editorial pass:
 
 ## License
 
-MIT (code) · CC BY-NC-ND 4.0 (paper)
+MIT (code) · CC BY 4.0 (paper)
+
+Relicensed from CC BY-NC-ND 4.0 on 2026-09-04: the prose is now open access in the
+full sense — reuse and derivative works permitted with attribution. Code remains MIT
+(`LICENSE`); written content is covered by `LICENSE-CONTENT`.

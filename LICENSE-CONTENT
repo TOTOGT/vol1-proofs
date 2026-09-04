@@ -1,0 +1,28 @@
+# Licence — written content
+
+Copyright (c) 2026 Pablo Nogueira Grossi — G6 LLC, Newark, NJ, USA.
+
+This file covers the *written* material in this repository: the Markdown notes,
+the LaTeX and HTML of Principia Orthogona Volume One, the figures, and the prose
+of the deposit descriptions. Source code — the Lean 4 developments and the Python
+instruments — is covered separately by `LICENSE` (MIT).
+
+## Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+You are free to share and adapt this material for any purpose, including
+commercially, provided you give appropriate credit, link to the licence, and
+indicate if changes were made.
+
+Full text: https://creativecommons.org/licenses/by/4.0/
+
+## Note on the change
+
+This content was previously licensed CC BY-NC-ND 4.0. It was relicensed to
+CC BY 4.0 on 2026-09-04 so that the repository is open access in the sense funders
+and journals mean: NC-ND permits neither commercial reuse nor derivative works,
+and therefore does not qualify. Nothing about attribution changes — credit is
+still required.
+
+Deposits made on Zenodo before this date carry the licence that was in force when
+they were deposited. The record files under `record/` state what was deposited and
+are not retroactively altered.
