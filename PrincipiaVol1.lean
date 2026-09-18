@@ -31,8 +31,10 @@
   WHAT THAT MEANS, PRECISELY.  It does not mean the file was never built.
   The error profile says the opposite: it is the fingerprint of Mathlib
   moving underneath code that was written and run against an earlier
-  revision.  `Ordinal.sup` and `Ordinal.lt_iSup_iff` were deprecated 2024-08-27;
-  `Order.isSuccLimit_add` was renamed `isLimit_add` 2024-10-11;
+  revision.  `Ordinal.sup` and `Ordinal.lt_sup` were deprecated 2024-08-27 and
+  are GONE at v4.32 -- this file now uses `⨆` with `Ordinal.lt_iSup_iff`;
+  `Ordinal.IsLimit.add_right` was renamed `isLimit_add` 2024-10-11 and is
+  `Order.isSuccLimit_add` at v4.32;
   `Set.finite_insert` is the Mathlib-3-era spelling of `Set.Finite.insert`.
   Those are the names the file uses.  It compiled when they were current.
 
