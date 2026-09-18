@@ -28,8 +28,8 @@
 #   0. the gate on its own fixtures — the instrument before the measurement
 #   1. lake build, all default targets
 #   2. sorry warnings, reported and explicitly not gating
-#   3. #print axioms over all 65 theorems
-#   4. the gate: no sorryAx, allowlist clean, count equals 65
+#   3. #print axioms over all 82 theorems
+#   4. the gate: no sorryAx, allowlist clean, count equals 82
 #
 # Neither `lake build` exiting 0 nor grepping for "sorry" can decide anything.
 # The first is a warning, not an error, so a build full of sorrys is green.

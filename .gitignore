@@ -3,3 +3,4 @@
 .lake/
 tools/*.out
 tools/build.log
+_to_delete/

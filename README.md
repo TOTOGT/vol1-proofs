@@ -1,5 +1,29 @@
 # vol1-proofs
 
+[![Verify Lean proofs (real kernel check)](https://github.com/TOTOGT/vol1-proofs/actions/workflows/verify-proofs.yml/badge.svg)](https://github.com/TOTOGT/vol1-proofs/actions/workflows/verify-proofs.yml)
+
+**In one minute.** Every theorem below is checked by the Lean kernel, and the
+check is reproducible from a clean clone:
+
+```sh
+bash tools/run.sh      # gate self-test -> build -> #print axioms -> gate
+```
+
+| | |
+|---|---|
+| theorems | **82** — 58 `PrincipiaVol1` + 24 `AutophagyDm3` |
+| `sorry` | **0** |
+| axioms used | `propext`, `Classical.choice`, `Quot.sound` — nothing else |
+| theorems needing *no* axiom | 1 (`unfold_stable_branch_is_vacuous`, named by the vacuity checker) |
+| pinned to | `leanprover/lean4:v4.14.0`, Mathlib `4bbdccd` |
+| known forward debt | 22 errors at Mathlib v4.32 — [documented, not hidden](docs/MATHLIB-FORWARD-v4.32.md) |
+
+The axiom report is committed at [`tools/axioms.txt`](tools/axioms.txt), one
+line per theorem. `lake build` exiting 0 decides nothing here — a build full of
+`sorry` is green, and a sorry-free theorem can still be vacuous. Only
+`#print axioms` plus a vacuity scan sees both, and the gate that reads them is
+tested on its own fixtures before it is allowed to measure anything.
+
 The Lean behind **Principia Orthogona, Volume I: The Mathematics of Generative
 Transitions** (Zenodo V7: [10.5281/zenodo.22084842](https://doi.org/10.5281/zenodo.22084842) · concept DOI:
 [10.5281/zenodo.19117399](https://doi.org/10.5281/zenodo.19117399)),
@@ -29,10 +53,16 @@ gate that refuses on `sorryAx` or on any axiom outside the allowlist.
 ```
 toolchain   leanprover/lean4:v4.14.0
 mathlib     v4.14.0  (rev 4bbdccd9c5f862bf90ff12f0a9e2c8be032b9a84)
-theorems    58
+theorems    82      PrincipiaVol1 58 + AutophagyDm3 24
 sorry       0
 axioms      propext, Classical.choice, Quot.sound — nothing else
+            (81 of 82 use all three; one uses none)
 ```
+
+`N` is never typed by hand. `tools/counts.py` reads the sources, emits the
+probe and computes `N`; the gate refuses if the report's line count disagrees.
+That is the whole reason the number in this README can be trusted: nothing
+here is a claim a human maintained.
 
 ## What V7 fixed
 
@@ -116,13 +146,16 @@ and it is what O1 should have said from the start.
 ## Layout
 
 ```
-PrincipiaVol1.lean        the deposit's Lean, V7 — the only source of theorems
+PrincipiaVol1.lean        the deposit's Lean, V7 — 58 theorems
+AutophagyDm3_v2.lean      the autophagy model — 24 theorems
 tools/run.sh              build → probe → gate
 tools/counts.py           reads the source; emits the probe and N. Never type N.
-tools/probe.lean          generated — #print axioms over all 58 theorems
+tools/probe.lean          generated — #print axioms over all 82 theorems
+tools/axioms.txt          the committed report, one line per theorem
 tools/axiom_gate.py       refuses on sorryAx or an off-allowlist axiom
 tools/test_axiom_gate.py  fixtures, including the run #245 fail-open case
 .github/workflows/        runs tools/run.sh on every push, and gates on it
+docs/                     forward-compatibility note for Mathlib v4.32
 record/                   the V6 file and its 81-error build log
 figures/ figures.py       the seven figures and their generator
 principia_vol1_v7.pdf     the paper
@@ -146,6 +179,11 @@ was always the honest number: 65 counted 58 theorems, seven of them twice.
 
 Two copies of one proof inside one repo is the mechanism that produced the V6
 drift. There is now one.
+
+`N` then went **58 → 82** when `AutophagyDm3_v2.lean` landed with 24 further
+theorems. So the three numbers that appear in this repository's history —
+65, 58, 82 — are one double-count corrected and one file added, in that order,
+and no statement was ever silently dropped.
 
 
 ## What else V7 found
