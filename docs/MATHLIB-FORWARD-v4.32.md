@@ -29,10 +29,24 @@ artifact of the failure mode.
 | `nsmul_eq_mul` shadowing | 4 | `open Ordinal` brings an `Ordinal` lemma into scope that is selected for a **real-valued** goal, so the rewrite picks the wrong lemma |
 | ordinal API renames | 18 | `Ordinal.sup` and `Ordinal.IsLimit` were renamed upstream |
 
-## 3 · Neither family is repaired here, and that is deliberate
+## 3 · The names are now confirmed — 2026-09-18
 
-Two of the four replacement names could not be confirmed against the installed
-Mathlib. This file carries Book VI Part I's machine-verified claim, which is
+This section previously said two of the four replacement names could not be
+confirmed. **All four are now confirmed**, read off geometry's vendored v4.32
+tree rather than recalled:
+
+| broken | replacement | confirmed at |
+|---|---|---|
+| `nsmul_eq_mul` under `open Ordinal` | `_root_.nsmul_eq_mul` | `Ordinal/Arithmetic.lean:653` declares the shadowing Ordinal lemma |
+| `Ordinal.sup` | `⨆` / `iSup` — `Ordinal.le_iSup`, `Ordinal.iSup_le` | `Ordinal/Family.lean`; `sup` deprecated 2025-12-25, `bsup` 2026-04-05 |
+| `Ordinal.IsLimit` | `Order.IsSuccLimit` | `Ordinal/Arithmetic.lean:39`, `isSuccLimit_iff` at :126 |
+| `Mathlib.Data.Complex.ExponentialBounds` | `Mathlib.Analysis.Complex.ExponentialBounds` | applied at the pin's inverse; see §1 |
+
+**Nothing in the port requires a guess any more.** What remains is mechanical.
+
+## 3b · Why it was still not repaired on 2026-09-13
+
+At that date two of the four could not be confirmed. This file carries Book VI Part I's machine-verified claim, which is
 the worst possible place to guess at a lemma name — a wrong name that happens
 to typecheck changes what was proved without changing what was claimed.
 

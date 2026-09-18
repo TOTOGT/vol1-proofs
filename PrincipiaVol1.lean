@@ -31,8 +31,8 @@
   WHAT THAT MEANS, PRECISELY.  It does not mean the file was never built.
   The error profile says the opposite: it is the fingerprint of Mathlib
   moving underneath code that was written and run against an earlier
-  revision.  `Ordinal.sup` and `Ordinal.lt_sup` were deprecated 2024-08-27;
-  `Ordinal.IsLimit.add_right` was renamed `isLimit_add` 2024-10-11;
+  revision.  `Ordinal.sup` and `Ordinal.lt_iSup_iff` were deprecated 2024-08-27;
+  `Order.isSuccLimit_add` was renamed `isLimit_add` 2024-10-11;
   `Set.finite_insert` is the Mathlib-3-era spelling of `Set.Finite.insert`.
   Those are the names the file uses.  It compiled when they were current.
 
@@ -50,7 +50,7 @@
     · `@dist _ M.metric` passed a `MetricSpace` where a `Dist` was expected.
       The metric field is now registered as an instance.
     · `(0 : Fin n)` with `n` a variable and no `[NeZero n]` — no `OfNat`.
-    · Ordinal API drift: `Ordinal.IsLimit.add_right`, `Ordinal.lt_add_of_
+    · Ordinal API drift: `Order.isSuccLimit_add`, `Ordinal.lt_add_of_
       pos_right` and the `α.card.ord` cofinality condition do not exist as
       written.  The correct hypothesis is `ℵ₀ < α.cof` (uncountable
       cofinality), which is what "regular uncountable" means here.
@@ -495,7 +495,7 @@ theorem transverse_sum_bound {n : ℕ} [NeZero n] (hn : n < 33) (lam : Fin n →
         exact pow_le_pow_left₀ (abs_nonneg _)
           ((h i (Finset.ne_of_mem_erase hi)).trans exp_neg_two_le) 6
     _ ≤ 31 * (1 / 4 : ℝ) ^ 6 := by
-        rw [nsmul_eq_mul]
+        rw [_root_.nsmul_eq_mul]
         have hc : ((Finset.univ.erase (0 : Fin n)).card : ℝ) ≤ 31 := by
           exact_mod_cast hcard
         exact mul_le_mul_of_nonneg_right hc (by positivity)
@@ -555,7 +555,7 @@ theorem separation_trace_first {n : ℕ} [NeZero n] (hn : n < 33)
           intro i hi
           exact (hM i (Finset.ne_of_mem_erase hi)).trans exp_neg_two_le
       _ ≤ 31 * (1 / 4 : ℝ) := by
-          rw [nsmul_eq_mul]
+          rw [_root_.nsmul_eq_mul]
           have hc : ((Finset.univ.erase (0 : Fin n)).card : ℝ) ≤ 31 := by
             exact_mod_cast hcard
           exact mul_le_mul_of_nonneg_right hc (by positivity)
@@ -593,7 +593,7 @@ theorem transverse_sum_bound_general {n : ℕ} [NeZero n] (lam : Fin n → ℝ)
         rw [abs_pow]
         exact pow_le_pow_left₀ (abs_nonneg _)
           ((h i (Finset.ne_of_mem_erase hi)).trans exp_neg_two_le) 6
-    _ = _ := by rw [nsmul_eq_mul]
+    _ = _ := by rw [_root_.nsmul_eq_mul]
 
 /-- ✓  **How much the dimension hypothesis is actually worth.**
     The argument behind `spectral_trace_ne_33` does not stop at 33.  It
@@ -664,7 +664,7 @@ theorem separation_fails_in_high_dimension :
       rw [if_neg (Finset.ne_of_mem_erase hi), ← Real.exp_nat_mul]
       norm_num
     rw [hsplit, Finset.sum_congr rfl hconst, Finset.sum_const, hcard,
-      nsmul_eq_mul, if_pos rfl]
+      _root_.nsmul_eq_mul, if_pos rfl]
     -- 1 + 17 006 113 · e⁻¹² > 33, because e¹² < 3¹² = 531 441
     have he3 : Real.exp 1 < 3 := by
       have := Real.exp_one_lt_d9
@@ -740,7 +740,7 @@ def IsUnboundedBelow (C : Set Ordinal) (α : Ordinal) : Prop :=
 def IsOmegaClosedBelow (C : Set Ordinal) (α : Ordinal) : Prop :=
   ∀ s : ℕ → Ordinal,
     (∀ n, s n ∈ C) → (∀ n, s n < α) → StrictMono s →
-    Ordinal.sup s ∈ C
+    (⨆ i, s i) ∈ C
 
 def IsClubBelow (C : Set Ordinal) (α : Ordinal) : Prop :=
   IsOmegaClosedBelow C α ∧ IsUnboundedBelow C α
@@ -748,7 +748,7 @@ def IsClubBelow (C : Set Ordinal) (α : Ordinal) : Prop :=
 def IsStationaryBelow (S : Set Ordinal) (α : Ordinal) : Prop :=
   ∀ C : Set Ordinal, IsClubBelow C α → ∃ β ∈ S, β < α ∧ β ∈ C
 
-def IsClosurePoint (α : Ordinal) : Prop := Ordinal.IsLimit α
+def IsClosurePoint (α : Ordinal) : Prop := Order.IsSuccLimit α
 
 def closurePointsBelow (α : Ordinal) : Set Ordinal :=
   { β | β < α ∧ IsClosurePoint β }
@@ -758,14 +758,14 @@ def IsMahloLike (α : Ordinal) : Prop :=
 
 /-- ✓  sup of a strictly increasing ω-sequence is a limit ordinal. -/
 theorem sup_strictMono_isLimit (s : ℕ → Ordinal) (hs : StrictMono s) :
-    Ordinal.IsLimit (Ordinal.sup s) := by
+    Order.IsSuccLimit ((⨆ i, s i)) := by
   refine ⟨?_, ?_⟩
   · intro h
-    have : s 0 < Ordinal.sup s := Ordinal.lt_sup.mpr ⟨1, hs (by norm_num)⟩
+    have : s 0 < (⨆ i, s i) := Ordinal.lt_iSup_iff.mpr ⟨1, hs (by norm_num)⟩
     rw [h] at this; exact absurd this (Ordinal.not_lt_zero _)
   · intro β hβ
-    obtain ⟨n, hn⟩ := Ordinal.lt_sup.mp hβ
-    refine Ordinal.lt_sup.mpr ⟨n + 1, ?_⟩
+    obtain ⟨n, hn⟩ := Ordinal.lt_iSup_iff.mp hβ
+    refine Ordinal.lt_iSup_iff.mpr ⟨n + 1, ?_⟩
     exact lt_of_le_of_lt (Order.succ_le_of_lt hn) (hs (Nat.lt_succ_self n))
 
 /-- ✓  Closure points are unbounded in the ordinal hierarchy. -/
@@ -778,8 +778,8 @@ theorem closurePoints_unbounded : ∀ α : Ordinal, ∃ γ > α, IsClosurePoint 
 /-- ✓  For regular α, sup of ω-sequence below α is below α. -/
 theorem sup_lt_of_regular (α : Ordinal)
     (hcf : Cardinal.aleph0 < α.cof)
-    (s : ℕ → Ordinal) (hs : ∀ n, s n < α) : Ordinal.sup s < α := by
-  refine Ordinal.sup_lt_ord_lift ?_ hs
+    (s : ℕ → Ordinal) (hs : ∀ n, s n < α) : (⨆ i, s i) < α := by
+  refine Ordinal.iSup_lt_ord_lift_of_isRegular ?_ hs
   simpa using hcf
 
 -- Clean chain construction (Function.iterate-based; replaces Nat.rec tangle)
@@ -832,21 +832,21 @@ private theorem chain_strictMono (C : Set Ordinal) (α : Ordinal)
 
 /-- ✓  For regular uncountable α, closure points are stationary below α.
     Formal content of §16 threshold conjecture infrastructure. -/
-theorem closurePoints_stationary (α : Ordinal) (hα : Ordinal.IsLimit α)
+theorem closurePoints_stationary (α : Ordinal) (hα : Order.IsSuccLimit α)
     (hcf : Cardinal.aleph0 < α.cof) :
     IsStationaryBelow (closurePointsBelow α) α := by
   intro C ⟨hC_closed, hC_unbounded⟩
   have hα0 : (0 : Ordinal) < α := hα.pos
   let c := chain C α hC_unbounded hα0
-  have hβ_lim : IsClosurePoint (Ordinal.sup c) :=
+  have hβ_lim : IsClosurePoint ((⨆ i, c i)) :=
     sup_strictMono_isLimit c (chain_strictMono C α hC_unbounded hα0)
-  have hβ_lt : Ordinal.sup c < α :=
+  have hβ_lt : (⨆ i, c i) < α :=
     sup_lt_of_regular α hcf c (chain_bound C α hC_unbounded hα0)
-  have hβ_mem : Ordinal.sup c ∈ C :=
+  have hβ_mem : (⨆ i, c i) ∈ C :=
     hC_closed c (chain_mem C α hC_unbounded hα0)
       (chain_bound C α hC_unbounded hα0)
       (chain_strictMono C α hC_unbounded hα0)
-  exact ⟨Ordinal.sup c, ⟨hβ_lt, hβ_lim⟩, hβ_lt, hβ_mem⟩
+  exact ⟨(⨆ i, c i), ⟨hβ_lt, hβ_lim⟩, hβ_lt, hβ_mem⟩
 
 -- ============================================================================
 -- §11  REGENERATION HIERARCHY
@@ -908,7 +908,7 @@ theorem ordinal_regeneration_unbounded :
 /-- ✓  Volume IV master theorem: ordinalNextLevel produces Mahlo-like levels
     for regular uncountable α. -/
 theorem regeneration_hierarchy_mahlo (r : OrdinalRegenerationLevel)
-    (hα : Ordinal.IsLimit (ordinalNextLevel r).level)
+    (hα : Order.IsSuccLimit (ordinalNextLevel r).level)
     (hcf : Cardinal.aleph0 < (ordinalNextLevel r).level.cof) :
     IsMahloLike (ordinalNextLevel r).level :=
   closurePoints_stationary _ hα hcf
