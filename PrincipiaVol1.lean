@@ -148,10 +148,13 @@ import Mathlib.Dynamics.FixedPoints.Basic
 import Mathlib.SetTheory.Ordinal.Basic
 import Mathlib.SetTheory.Ordinal.Arithmetic
 import Mathlib.SetTheory.Cardinal.Cofinality
-import Mathlib.Data.Complex.ExponentialBounds  -- V7: Real.exp_one_lt_d9
--- Module path is correct for the PINNED Mathlib (v4.14.0). It moved to
--- Mathlib.Analysis.Complex.ExponentialBounds by v4.32.0; see
--- docs/MATHLIB-FORWARD-v4.32.md for what else breaks at that version.
+import Mathlib.Analysis.Complex.ExponentialBounds  -- V7: Real.exp_one_lt_d9
+-- Ported 2026-09-22: this module lived at Mathlib.Data.Complex.ExponentialBounds
+-- under the v4.14.0 pin this file was written against. Confirmed absent at that
+-- path in geometry's vendored v4.32.0 / Mathlib 81a5d257c8 tree (only
+-- Mathlib.Analysis.Complex.ExponentialBounds exists there); this was the fourth
+-- and last of the four families docs/MATHLIB-FORWARD-v4.32.md scoped, and the
+-- only one the 2026-09-18 port (0ba9503) left undone.
 
 -- ============================================================================
 -- NAMESPACE

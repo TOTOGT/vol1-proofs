@@ -50,14 +50,45 @@ At that date two of the four could not be confirmed. This file carries Book VI P
 the worst possible place to guess at a lemma name — a wrong name that happens
 to typecheck changes what was proved without changing what was claimed.
 
-So the position is: **green at the pin, 22 known errors forward, two names
-unconfirmed.** `[OPEN]`
+## 4 · The port, and the one family it missed — 2026-09-18 through 2026-09-22
 
-## 4 · What would close it
+0ba9503 (2026-09-18) applied three of the four confirmed replacements — the
+`nsmul_eq_mul` shadowing fix (4 sites), the `Ordinal.sup`/`Ordinal.lt_sup`
+family (→ `⨆`/`Ordinal.lt_iSup_iff`), and `Ordinal.IsLimit` → `Order.IsSuccLimit`.
+It bumped `lean-toolchain` and `lakefile.toml` to v4.32.0 / Mathlib 81a5d257c8
+(geometry's exact pin) and pushed the branch for CI to judge, exactly as R22
+in geometry's CLAUDE.md asks.
 
-- Confirm all four `nsmul_eq_mul` replacements against a v4.32 checkout.
-- Confirm the `Ordinal.sup` / `Ordinal.IsLimit` successors.
-- Then either bump the pin, or keep the pin and carry a v4.32 CI job in
-  parallel so the two are checked independently.
+**It did not touch the `Mathlib.Data.Complex.ExponentialBounds` import** —
+row 1 of this document, the one family that was never in doubt (§1 confirmed
+it 2026-09-13). CI run #9 on that commit (5e49766, the header-restore commit
+immediately after) failed in the `Verify (gate self-test, build, probe,
+gate)` step. The full log is behind GitHub sign-in and was not reachable from
+this session; what confirms the cause instead is checking geometry's own
+vendored Mathlib tree at the exact pinned revision directly —
+`Mathlib/Analysis/Complex/ExponentialBounds.lean` exists there,
+`Mathlib/Data/Complex/ExponentialBounds.lean` does not. An unresolved import
+stops elaboration before anything else in the file runs, which matches §1's
+own note that a failed import here reports as one error, not the real count.
 
-Until then the pin is the claim, and this file is the asterisk.
+**Fixed 2026-09-22**, same branch (`port-v4.32`): the import now reads
+`Mathlib.Analysis.Complex.ExponentialBounds`. All four families are now
+applied in the code. Delimiter/bracket balance was checked as a sanity pass
+(no local toolchain here either) — that is not a compile.
+
+So the position is: **all four fixes applied, not yet confirmed by a real
+kernel.** CI on the next push to `port-v4.32` is what actually judges it, per
+R22's own order of operations — a green run there is step 2, not this note.
+`[OPEN]` until that run is green and the axiom report still reads 82
+theorems / 0 sorry / `propext, Classical.choice, Quot.sound` only.
+
+## 5 · What would close it
+
+- Push this fix, let CI run, read the result — not the log excerpt this
+  session could reach, the actual pass/fail.
+- If green: confirm the axiom report is unchanged from the v4.14.0 baseline
+  (58 `PrincipiaVol1` + 24 `AutophagyDm3` = 82, 0 sorry, same three axioms),
+  then the file moves into geometry per R22 and the claims get tagged per R21.
+- If not green: the new error list is the next piece of work, and — same
+  discipline as before — no replacement name goes in without being read off
+  the pinned tree first.
