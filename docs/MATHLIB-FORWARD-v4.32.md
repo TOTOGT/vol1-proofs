@@ -76,19 +76,55 @@ own note that a failed import here reports as one error, not the real count.
 applied in the code. Delimiter/bracket balance was checked as a sanity pass
 (no local toolchain here either) — that is not a compile.
 
-So the position is: **all four fixes applied, not yet confirmed by a real
-kernel.** CI on the next push to `port-v4.32` is what actually judges it, per
-R22's own order of operations — a green run there is step 2, not this note.
-`[OPEN]` until that run is green and the axiom report still reads 82
-theorems / 0 sorry / `propext, Classical.choice, Quot.sound` only.
+So the position was: all four fixes applied, not yet confirmed. **Pushed
+2026-09-22 (`fc2b49b`), and it did not close the loop -- CI run #11 failed
+again, in 45s.** That is faster than run #9's 1m8s (the pre-fix failure), not
+slower, which does not fit "the same import problem, now one line further
+into the file" -- it fits something failing even earlier than `lake build`
+reaching `PrincipiaVol1.lean` at all.
+
+**Found by reading the dependency files, not the log (still sign-in-gated):**
+`lake-manifest.json` -- the lockfile `lake` actually resolves `.lake/packages`
+against -- was never updated when `0ba9503` bumped `lakefile.toml`'s mathlib
+`rev` to `81a5d257c8`. It still reads `4bbdccd9c5f8` (the v4.14.0 rev), and
+every transitive dependency with it: `importGraph`, `aesop`, `batteries` all
+still pinned to their `v4.14.0` tags, `proofwidgets` to `v0.0.47` -- the whole
+v4.14.0-era dependency set, untouched. `lakefile.toml` and `lake-manifest.json`
+now name two different Mathlib revisions for the same build. Lake does not
+silently split that difference: either it refuses outright ("manifest out of
+date," a fast, clean error) or it builds against whatever the manifest says
+-- the old rev -- in which case an import written for the new rev (this
+session's `Mathlib.Analysis.Complex.ExponentialBounds` fix, correct at
+`81a5d257c8`, wrong at `4bbdccd9c5f8`) fails to resolve for the same reason
+the old import used to. Either mechanism produces exactly what was observed:
+a fast failure, without needing a second Lean-level bug. **This is inference
+from the manifest's own content, stated as inference -- the actual GitHub
+Actions log for run #11 was not read, only its duration and the step it
+failed on.**
+
+`[OPEN]`, and differently open than it looked a few hours earlier: the four
+named families were real and are genuinely fixed, but they were never
+sufficient on their own, because the lockfile was never regenerated for the
+new pin. That regeneration is `lake update` (or `lake update mathlib`),
+which needs an actual Lake/Lean install to resolve a mutually-compatible
+revision set for `mathlib`, `aesop`, `batteries`, `importGraph`,
+`proofwidgets`, `Qq`, `plausible`, `LeanSearchClient`, `Cli` at v4.32.0 -- not
+something to hand-edit. Guessing eight interdependent revisions into a JSON
+file so it "looks resolved" is exactly the failure mode this project exists
+to catch; better to leave it `[OPEN]` and named than to paper over it.
 
 ## 5 · What would close it
 
-- Push this fix, let CI run, read the result — not the log excerpt this
-  session could reach, the actual pass/fail.
+- **Run `lake update` (or `lake update mathlib`) against `lakefile.toml`'s
+  `81a5d257c8` pin, on a machine with a real Lake/Lean install, and commit the
+  regenerated `lake-manifest.json`.** This is the actual blocking step now --
+  everything else in this document is already done.
+- Then push, let CI run, and this time read the actual result -- not a
+  duration and a step name, the real pass/fail and, if it fails, the real
+  error text.
 - If green: confirm the axiom report is unchanged from the v4.14.0 baseline
   (58 `PrincipiaVol1` + 24 `AutophagyDm3` = 82, 0 sorry, same three axioms),
   then the file moves into geometry per R22 and the claims get tagged per R21.
-- If not green: the new error list is the next piece of work, and — same
-  discipline as before — no replacement name goes in without being read off
-  the pinned tree first.
+- If not green: the new error list is the next piece of work, same discipline
+  as before -- no replacement name goes in without being read off the pinned
+  tree first.
