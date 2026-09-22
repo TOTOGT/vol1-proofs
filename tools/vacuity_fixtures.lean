@@ -9,7 +9,15 @@
   Expected: FLAGGED: 5 out of 6 — everything except `honest_content`.
 -/
 import Lean
-import Mathlib
+-- Was `import Mathlib`. That is the only place in this repository that imports the
+-- Mathlib root aggregator, and `lake` never builds `Mathlib.olean` unless something
+-- asks for it -- 2269 Mathlib oleans are built here, the aggregator is not. So stage 5
+-- could never elaborate its own fixtures, exited 1 before the real scan, and the scan
+-- has never run in this checkout. Fixed 2026-08-29 by importing exactly what
+-- tools/vacuity.lean imports: a control that elaborates in a different environment
+-- from the thing it controls is not a control.
+import PrincipiaVol1
+import AutophagyDm3_v2
 open Lean Elab Command Meta
 
 namespace VacuityFixture
